@@ -109,7 +109,14 @@ color_loop:
 	lda #%00001010	; show background
 	sta $2001	; PPUMASK, controls rendering of sprites and backgrounds
 
+; Let's try some audio
+	
+; enable apu
+	lda #%00000001
+	sta $4015
+
 forever:
+	jsr play_a440
 	jmp	forever
 
 nmi:
@@ -118,11 +125,66 @@ nmi:
 irq:
 	rti
 
+play_a440:
+	pha
+	lda #%10011111
+	sta $4000
+
+	lda #%11111101	; Low: 0xFD
+	sta $4002
+
+	lda #%11111000	; High: 0x00
+	sta $4003
+
+;	ldx #$24
+;	lda periodTableLo, X
+;	sta $4002
+
+;	lda periodTableHi, X
+;	ora #%11111000
+;	sta $4003
+
+	pla
+	rts
+
+play_a220:
+	pha
+	lda #%10011111
+	sta $4000
+
+	lda #%11111011
+	sta $4002
+
+	lda #%11111001
+	sta $4003
+
+	pla
+	rts
+
+periodTableLo:
+	.byte $F1,$7f,$13,$ad,$4d,$f3,$9d,$4c,$00,$b8,$74,$34
+	.byte $F8,$BF,$89,$56,$26,$f9,$ce,$a6,$80,$5c,$3a,$1a
+	.byte $FB,$DF,$c4,$ab,$93,$7c,$67,$52,$3f,$2d,$1c,$0c
+	.byte $FD,$EF,$e1,$d5,$c9,$bd,$b3,$a9,$9f,$96,$8e,$86
+  	.byte $7E,$77,$70,$6a,$64,$5e,$59,$54,$4f,$4b,$46,$42
+  	.byte $3F,$3B,$38,$34,$31,$2f,$2c,$29,$27,$25,$23,$21
+  	.byte $1F,$1D,$1b,$1a,$18,$17,$15,$14
+periodTableHi:
+  	.byte $07,$07,$07,$06,$06,$05,$05,$05,$05,$04,$04,$04
+  	.byte $03,$03,$03,$03,$03,$02,$02,$02,$02,$02,$02,$02
+  	.byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
+  	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  	.byte $00,$00,$00,$00,$00,$00,$00,$00
+
 background_nametable:
 	.incbin "bag.nam"
 
 background_pallete:
 	.incbin "bag.pal"
+
+;.segment "RODATA"
 
 .segment "VECTORS"
 	.word nmi		; when non-maskable interrupt happens, goes to label nmi
