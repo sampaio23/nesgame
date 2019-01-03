@@ -130,19 +130,19 @@ play_a440:
 	lda #%10011111
 	sta $4000
 
-	lda #%11111101	; Low: 0xFD
-	sta $4002
-
-	lda #%11111000	; High: 0x00
-	sta $4003
-
-;	ldx #$24
-;	lda periodTableLo, X
+;	lda #%11111101	; Low: 0xFD
 ;	sta $4002
 
-;	lda periodTableHi, X
-;	ora #%11111000
+;	lda #%11111000	; High: 0x00
 ;	sta $4003
+
+	ldx #$27
+	lda periodTableLo, X
+	sta $4002
+
+	lda periodTableHi, X
+	ora #%10011000
+	sta $4003
 
 	pla
 	rts
