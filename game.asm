@@ -179,10 +179,10 @@ periodTableHi:
   	.byte $00,$00,$00,$00,$00,$00,$00,$00
 
 background_nametable:
-	.incbin "bag.nam"
+	.incbin "backgrounds/bk1.nam"
 
 background_pallete:
-	.incbin "bag.pal"
+	.incbin "backgrounds/bag.pal"
 
 ;.segment "RODATA"
 
@@ -192,4 +192,4 @@ background_pallete:
 	.word irq		; using external interrupt IRQ
 
 .segment "CHARS"
-	.incbin "mario.chr"	; includes 8KB graphics
+	.incbin "chr/mario.chr"	; includes 8KB graphics

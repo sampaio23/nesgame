@@ -12,16 +12,21 @@ For tile editing, I use [NES Screen Tool](http://forums.nesdev.com/viewtopic.php
 
 ### Basic code skeleton
 
-http://www.6502.org/tutorials/6502opcodes.html#AND
-https://wiki.nesdev.com/w/index.php/Programming_Basics
-https://wiki.nesdev.com/w/index.php/PPU_power_up_state
-https://wiki.nesdev.com/w/index.php/CPU_memory_map
+[6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
+
+[Programming Basics](https://wiki.nesdev.com/w/index.php/Programming_Basics)
+
+[PPU Power Up State](https://wiki.nesdev.com/w/index.php/PPU_power_up_state)
+
+[CPU Memory Map](https://wiki.nesdev.com/w/index.php/CPU_memory_map)
 
 ### Draw a background - PPU
 
-http://forums.nesdev.com/viewtopic.php?f=10&t=15648
-https://wiki.nesdev.com/w/index.php/PPU_registers
-https://wiki.nesdev.com/w/index.php/PPU_memory_map
+[Background example](http://forums.nesdev.com/viewtopic.php?f=10&t=15648)
+
+[PPU Registers](https://wiki.nesdev.com/w/index.php/PPU_registers)
+
+[PPU Memory Map](https://wiki.nesdev.com/w/index.php/PPU_memory_map)
 
 It's important to read about [NMI](https://wiki.nesdev.com/w/index.php/NMI) and [PPU Frame Timing](https://wiki.nesdev.com/w/index.php/PPU_frame_timing) and learn good practices about graphic update during NMI.
 
@@ -31,8 +36,9 @@ The first background is a simple platform.
 
 ### Play some audio - APU
 
-https://safiire.github.io/blog/2015/03/29/creating-sound-on-the-nes/
-https://wiki.nesdev.com/w/index.php/APU_registers
+[Audio Example](https://safiire.github.io/blog/2015/03/29/creating-sound-on-the-nes/)
+
+[APU Registers](https://wiki.nesdev.com/w/index.php/APU_registers)
 
 I used a [period table](http://wiki.nesdev.com/w/index.php/APU_period_table) to have notes on the fly. The link shows how to get one (or just copy) and a good example on how to use is [here](http://blargg.8bitalley.com/parodius/nes-code/apu_scale.s).
 
