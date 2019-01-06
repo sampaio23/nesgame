@@ -157,14 +157,16 @@ nmi:
 nmi_sprites:
 	lda #$00
 	sta $2003
-	lda sprite_Y
-	sta $2004
-	lda sprite_tile
-	sta $2004
-	lda sprite_att
-	sta $2004
-	lda sprite_X
-	sta $2004
+	lda #$02
+	sta $4014
+;	lda sprite_Y
+;	sta $2004
+;	lda sprite_tile
+;	sta $2004
+;	lda sprite_att
+;	sta $2004
+;	lda sprite_X
+;	sta $2004
 	inc sprite_X
 	rts
 
@@ -225,12 +227,12 @@ periodTableHi:
 
 sprites00:
 	.byte $80, $08, %00000000, $80
-sprites10:
-	.byte $81, $09, %00000000, $80
-sprites01:
-	.byte $82, $16, %00000000, $80
-sprites11:
-	.byte $83, $17, %00000000, $80
+;sprites10:
+;	.byte $81, $09, %00000000, $80
+;sprites01:
+;	.byte $82, $16, %00000000, $80
+;sprites11:
+;	.byte $83, $17, %00000000, $80
 
 background_nametable:
 	.incbin "backgrounds/bk1.nam"
