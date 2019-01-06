@@ -44,7 +44,13 @@ I used a [period table](http://wiki.nesdev.com/w/index.php/APU_period_table) to 
 
 ### Draw a Sprite
 
-To do
+[Sprite Example](http://forums.nesdev.com/viewtopic.php?f=10&t=15647)
+
+[PPU OAM](http://wiki.nesdev.com/w/index.php/PPU_OAM)
+
+PPUCTRL ($2000) and PPUMASK ($2001) had to be changed in order to load sprites too.
+
+![](https://github.com/sampaio23/nesgame/blob/master/images/1sprite.png)
 
 ### Get controller input
 

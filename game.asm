@@ -6,6 +6,14 @@
 ; TXS: transfer X to stack pointer
 ;;;
 
+; Variables
+
+
+; Character
+sprite_Y		=	$0200
+sprite_tile		=	$0201
+sprite_att		=	$0202
+sprite_X		=	$0203
 
 .segment "HEADER"
 	.byte 	"NES", $1A
@@ -90,12 +98,36 @@ nametable_loop:
 	sta $2006
 	ldx #$00
 
-color_loop:
+background_color_loop:
 	lda background_pallete, X
 	sta $2007
 	inx
 	cpx #$10	; size of pallete RAM: 0x0020, until 0x3F10 is background palletes
-	bne color_loop	; after 0x3F10, there should be sprite palletes
+	bne background_color_loop	; after 0x3F10, there should be sprite palletes
+
+; Sprites color setup
+	lda $2002
+	lda #$3F
+	sta $2006
+	lda #$10
+	sta $2006
+	ldx #$00
+sprite_color_loop:
+	lda background_pallete, X
+	sta $2007
+	inx
+	cpx #$10
+	bne sprite_color_loop
+
+; Load our sprite to RAM
+load_sprites:
+	ldx #$00
+load_sprites_loop:
+	lda sprites00, X
+	sta $0200, X
+	inx
+	cpx #$04
+	bne load_sprites_loop
 
 ; Code for reseting scroll
 	lda #$00
@@ -104,9 +136,9 @@ color_loop:
 	sta $2005
 
 ; Turning on NMI and rendering
-	lda #%00010000
+	lda #%10010000
 	sta $2000	; PPUCTRL
-	lda #%00001010	; show background
+	lda #%00011010	; show background
 	sta $2001	; PPUMASK, controls rendering of sprites and backgrounds
 
 ; Let's try some audio
@@ -116,11 +148,25 @@ color_loop:
 	sta $4015
 
 forever:
-	jsr play_a440
 	jmp	forever
 
 nmi:
+	jsr nmi_sprites
 	rti
+
+nmi_sprites:
+	lda #$00
+	sta $2003
+	lda sprite_Y
+	sta $2004
+	lda sprite_tile
+	sta $2004
+	lda sprite_att
+	sta $2004
+	lda sprite_X
+	sta $2004
+	inc sprite_X
+	rts
 
 irq:
 	rti
@@ -151,7 +197,6 @@ play_a220:
 	pha
 	lda #%10011111
 	sta $4000
-
 	lda #%11111011
 	sta $4002
 
@@ -177,6 +222,15 @@ periodTableHi:
   	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
   	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
   	.byte $00,$00,$00,$00,$00,$00,$00,$00
+
+sprites00:
+	.byte $80, $08, %00000000, $80
+sprites10:
+	.byte $81, $09, %00000000, $80
+sprites01:
+	.byte $82, $16, %00000000, $80
+sprites11:
+	.byte $83, $17, %00000000, $80
 
 background_nametable:
 	.incbin "backgrounds/bk1.nam"
