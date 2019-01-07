@@ -11,6 +11,9 @@
 char_vel_x	=	$0001
 char_vel_y	=	$0002
 
+
+joypad		=	$4016
+
 .segment "HEADER"
 	.byte 	"NES", $1A
 	.byte 	2
@@ -137,6 +140,89 @@ sprite_color_loop:
 	sta char_vel_x
 
 forever:
+	
+; Reading input data
+
+	lda #$01
+	sta $4016
+	lda #$00
+	sta $4016
+
+; Order: A B Select Start Up Down Left Right
+; only one bit is read at a time, so we have to read $4016 eight times
+
+; A
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne A_not_pressed
+
+A_not_pressed:
+
+; B
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne B_not_pressed
+
+B_not_pressed:
+
+; Select
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne Select_not_pressed
+
+Select_not_pressed:
+
+; Start
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne Start_not_pressed
+
+Start_not_pressed:
+
+; Up
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne Up_not_pressed
+
+	dec char_vel_y
+
+Up_not_pressed:
+
+; Down
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne Down_not_pressed
+
+	inc char_vel_y
+
+Down_not_pressed:
+
+; Left
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne Left_not_pressed
+	
+	dec char_vel_x
+
+Left_not_pressed:
+
+; Right
+	lda $4016
+	and #%00000001
+	cmp #%00000001
+	bne Right_not_pressed
+
+	inc char_vel_x
+
+Right_not_pressed:
+
 	jmp	forever
 
 nmi:
@@ -150,13 +236,22 @@ nmi_sprites:
 ;; Draw character
 
 	lda #$08      ; Top of the screen
+	clc
+	adc char_vel_y
   	sta $0200     ; Sprite 1 Y Position
   	lda #$08
+	clc
+	adc char_vel_y
   	sta $0204     ; Sprite 2 Y Position
   	lda #$10
+	clc
+	adc char_vel_y
   	sta $0208     ; Sprite 3 Y Position
   	lda #$10
+	clc
+	adc char_vel_y
   	sta $020C     ; Sprite 4 Y Position
+
   	lda #$3A      ; Top Left section of Mario standing still
   	sta $0201     ; Sprite 1 Tile Number
   	lda #$37      ; Top Right section of Mario standing still
@@ -173,18 +268,21 @@ nmi_sprites:
   	sta $020E     ; Sprite 4 Attributes
 
   	lda #$08      ; Left of the screen.
+	clc
 	adc char_vel_x
   	sta $0203     ; Sprite 1 X Position
   	lda #$10
+	clc
   	adc char_vel_x
 	sta $0207     ; Sprite 2 X Position
   	lda #$08
+	clc
   	adc char_vel_x
 	sta $020B     ; Sprite 3 X Position
  	lda #$10
+	clc
   	adc char_vel_x
 	sta $020F     ; Sprite 4 X Position
-	inc char_vel_x
 
 	rti
 

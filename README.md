@@ -52,9 +52,21 @@ PPUCTRL ($2000) and PPUMASK ($2001) had to be changed in order to load sprites t
 
 ![](https://github.com/sampaio23/nesgame/blob/master/images/1sprite.png)
 
+Using OAM DMA ($4014), one can load 256 bytes of sprites, and now it's possible to draw more than one sprite faster.
+
+![](https://github.com/sampaio23/nesgame/blob/master/images/2sprite.png)
+
+[OAM DMA Example](http://www.vbforums.com/showthread.php?858523-NES-6502-Programming-Tutorial-Part-3-Drawing-a-Sprite)
+
 ### Get controller input
 
-To do
+Reading controller input is done through $4016 and $4017.
+
+[Reading Input Example](http://forums.nesdev.com/viewtopic.php?f=10&t=15645)
+[Controller Reading](http://wiki.nesdev.com/w/index.php/Controller_Reading)
+[Controller Port Registers](http://wiki.nesdev.com/w/index.php/Controller_port_registers)
+
+Now it's possible to move the sprite (character) based on controller input.
 
 ### Move the character
 
