@@ -8,12 +8,8 @@
 
 ; Variables
 
-
-; Character
-sprite_Y		=	$0200
-sprite_tile		=	$0201
-sprite_att		=	$0202
-sprite_X		=	$0203
+char_vel_x	=	$0001
+char_vel_y	=	$0002
 
 .segment "HEADER"
 	.byte 	"NES", $1A
@@ -119,16 +115,6 @@ sprite_color_loop:
 	cpx #$10
 	bne sprite_color_loop
 
-; Load our sprite to RAM
-load_sprites:
-	ldx #$00
-load_sprites_loop:
-	lda sprites00, X
-	sta $0200, X
-	inx
-	cpx #$04
-	bne load_sprites_loop
-
 ; Code for reseting scroll
 	lda #$00
 	sta $2005
@@ -147,28 +133,60 @@ load_sprites_loop:
 	lda #%00000001
 	sta $4015
 
+	lda #$01
+	sta char_vel_x
+
 forever:
 	jmp	forever
 
 nmi:
-	jsr nmi_sprites
-	rti
 
 nmi_sprites:
 	lda #$00
 	sta $2003
 	lda #$02
 	sta $4014
-;	lda sprite_Y
-;	sta $2004
-;	lda sprite_tile
-;	sta $2004
-;	lda sprite_att
-;	sta $2004
-;	lda sprite_X
-;	sta $2004
-	inc sprite_X
-	rts
+
+;; Draw character
+
+	lda #$08      ; Top of the screen
+  	sta $0200     ; Sprite 1 Y Position
+  	lda #$08
+  	sta $0204     ; Sprite 2 Y Position
+  	lda #$10
+  	sta $0208     ; Sprite 3 Y Position
+  	lda #$10
+  	sta $020C     ; Sprite 4 Y Position
+  	lda #$3A      ; Top Left section of Mario standing still
+  	sta $0201     ; Sprite 1 Tile Number
+  	lda #$37      ; Top Right section of Mario standing still
+ 	sta $0205     ; Sprite 2 Tile Number
+  	lda #$4F      ; Bottom Left section of Mario standing still
+  	sta $0209     ; Sprite 3 Tile Number
+  	lda #$4F      ; Bottom Right section of Mario standing still
+  	sta $020D     ; Sprite 4 Tile Number
+  	lda #$00		; No attributes, using first sprite palette which is number 0
+  	sta $0202     ; Sprite 1 Attributes
+  	sta $0206     ; Sprite 2 Attributes
+  	sta $020A     ; Sprite 3 Attributes
+  	lda #$40      ; Flip horizontal attribute
+  	sta $020E     ; Sprite 4 Attributes
+
+  	lda #$08      ; Left of the screen.
+	adc char_vel_x
+  	sta $0203     ; Sprite 1 X Position
+  	lda #$10
+  	adc char_vel_x
+	sta $0207     ; Sprite 2 X Position
+  	lda #$08
+  	adc char_vel_x
+	sta $020B     ; Sprite 3 X Position
+ 	lda #$10
+  	adc char_vel_x
+	sta $020F     ; Sprite 4 X Position
+	inc char_vel_x
+
+	rti
 
 irq:
 	rti
@@ -225,20 +243,12 @@ periodTableHi:
   	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
   	.byte $00,$00,$00,$00,$00,$00,$00,$00
 
-sprites00:
-	.byte $80, $08, %00000000, $80
-;sprites10:
-;	.byte $81, $09, %00000000, $80
-;sprites01:
-;	.byte $82, $16, %00000000, $80
-;sprites11:
-;	.byte $83, $17, %00000000, $80
-
 background_nametable:
 	.incbin "backgrounds/bk1.nam"
 
 background_pallete:
 	.incbin "backgrounds/bag.pal"
+
 
 ;.segment "RODATA"
 
