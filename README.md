@@ -70,9 +70,16 @@ Reading controller input is done through $4016 and $4017.
 
 Now it's possible to move the sprite (character) based on controller input.
 
+### Play a song for the game
+
+Not done yet. References until now:
+
+[APU DMC](https://wiki.nesdev.com/w/index.php/APU_DMC)
+[DMC Usage](http://nesdev.com/dmc.txt)
+[IRQ](https://wiki.nesdev.com/w/index.php/IRQ)
+
 ### Future Work
 
 * Add gravity and make movement better
 * Play a sound for jump
-* Play a sound for the game
 * Move background
