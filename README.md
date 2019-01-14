@@ -72,6 +72,7 @@ Now it's possible to move the sprite (character) based on controller input.
 
 ### Future Work
 
+* Add gravity and make movement better
 * Play a sound for jump
 * Play a sound for the game
 * Move background
